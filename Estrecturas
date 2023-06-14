@@ -1,0 +1,73 @@
+--Function
+
+CREATE FUNCTION   [ nombre_funcion ]
+( [ @parameter tipo de dato ])
+RETURNS valor_escalar  (ejemplo: int, table)          (si es table return)
+[AS]
+BEGIN
+cuerpo de la funcion
+RETURN expresion_escalar
+END
+
+--valor escalar
+print dbo.[ nombre_funcion ] (@parameter)
+--tabla
+select * from dbo.[ nombre_funcion ] ()
+
+
+--Procedura
+
+CREATE PROCEDURE <Procedure_Name>
+-- Añadir parámetros al procedimiento almacenado (opcional)
+<@Param1> <Datatype_For_Param1> = <Default_Value_For_Param1>,
+<@Param2> <Datatype_For_Param2> = <Default_Value_For_Param2>
+AS
+BEGIN
+-- Insertar la sentencia para el procedimiento
+Sentencia SQL
+END
+GO
+
+
+
+--View
+
+CREATE VIEW <Procedure_Name>
+as
+-- Insertar la sentencia para el procedimiento
+GO
+
+
+
+
+--Transacciones
+BEGIN TRAN NombreTransaccion--Inicio de transacción con su nombre Tadd.
+/*Bloque de instrucciones a ejecutar en la Transacción
+---------------------------------------
+---------------------------------------*/
+COMMIT TRAN NombreTransaccion--Confirmación de la transacción.
+ROLLBACK TRAN NombreTransaccion--Reversión de la transacción.
+
+EJEMPLO:
+CREATE PROCEDURE usp_InsertaCliente
+@id varchar(5),
+@nombre varchar(50),
+@direccion varchar(100),
+@idpais char(3),
+@fono varchar(15)
+AS
+--Inicio de la Transaccion
+BEGIN TRAN tcliente
+Insert Into Ventas.clientes Values(@id, @nombre, @direccion, @idpais, @fono)
+IF @@ERROR = 0
+Begin
+COMMIT TRAN tcliente;
+print 'Pedido Registrado'
+End
+ELSE
+Begin
+Print @@error_message()
+ROLLBACK TRAN tcliente
+End CATCH
+
+
