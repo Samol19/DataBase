@@ -103,3 +103,44 @@ begin
 end
 close cursor_movies
 deallocate cursor_movies
+
+
+
+---cursor modifcao
+
+create procedure usp_prueba
+    as
+    begin
+declare @year int
+declare  @genero varchar(50)
+declare @cantidad int
+
+declare cursor_movies cursor for
+--declarar cursor
+
+--query
+select year,description, count( m.id) cantidad
+from movies m
+join genres g on m.genre_id = g.id
+group by year,description
+
+
+--abir cursor
+open cursor_movies
+
+--saltar a la siguiente celda (fetch)
+fetch cursor_movies into @year, @genero,@cantidad
+while (@@fetch_status=0) --MientrasHallaFilasEnLaConsulta
+begin
+    print(@cantidad)
+    fetch cursor_movies into @year, @genero,@cantidad
+end
+close cursor_movies
+deallocate cursor_movies
+        end
+
+exec usp_prueba
+
+
+
+
